@@ -80,72 +80,72 @@ public class PlanetSelectionGui {
 			//Teleport Planet Buttons
 			if (message.getInteger() == 0) {
 				defaultOptions(context.getSender());
-				Methodes.teleportButton(context.getSender(), new ResourceLocation("minecraft:overworld"), false);
+				Methodes.teleportButton(context.getSender(), Methodes.OVERWORLD, false);
 			}
 			if (message.getInteger() == 1) {
 				defaultOptions(context.getSender());
-				Methodes.teleportButton(context.getSender(), new ResourceLocation("boss_tools:moon"), false);
+				Methodes.teleportButton(context.getSender(), Methodes.MOON, false);
 			}
 			if (message.getInteger() == 2) {
 				defaultOptions(context.getSender());
-				Methodes.teleportButton(context.getSender(), new ResourceLocation("boss_tools:mars"), false);
+				Methodes.teleportButton(context.getSender(), Methodes.MARS, false);
 			}
 			if (message.getInteger() == 3) {
 				defaultOptions(context.getSender());
-				Methodes.teleportButton(context.getSender(), new ResourceLocation("boss_tools:mercury"), false);
+				Methodes.teleportButton(context.getSender(), Methodes.MERCURY, false);
 			}
 			if (message.getInteger() == 4) {
 				defaultOptions(context.getSender());
-				Methodes.teleportButton(context.getSender(), new ResourceLocation("boss_tools:venus"), false);
+				Methodes.teleportButton(context.getSender(), Methodes.VENUS, false);
 			}
 
 			//Teleport Orbit Buttons
 			if (message.getInteger() == 5) {
 				defaultOptions(context.getSender());
-				Methodes.teleportButton(context.getSender(), new ResourceLocation("boss_tools:overworld_orbit"), false);
+				Methodes.teleportButton(context.getSender(), Methodes.OVERWORLD_ORBIT, false);
 			}
 			if (message.getInteger() == 6) {
 				defaultOptions(context.getSender());
-				Methodes.teleportButton(context.getSender(), new ResourceLocation("boss_tools:moon_orbit"), false);
+				Methodes.teleportButton(context.getSender(), Methodes.MOON_ORBIT, false);
 			}
 			if (message.getInteger() == 7) {
 				defaultOptions(context.getSender());
-				Methodes.teleportButton(context.getSender(), new ResourceLocation("boss_tools:mars_orbit"), false);
+				Methodes.teleportButton(context.getSender(), Methodes.MARS_ORBIT, false);
 			}
 			if (message.getInteger() == 8) {
 				defaultOptions(context.getSender());
-				Methodes.teleportButton(context.getSender(), new ResourceLocation("boss_tools:mercury_orbit"), false);
+				Methodes.teleportButton(context.getSender(), Methodes.MERCURY_ORBIT, false);
 			}
 			if (message.getInteger() == 9) {
 				defaultOptions(context.getSender());
-				Methodes.teleportButton(context.getSender(), new ResourceLocation("boss_tools:venus_orbit"), false);
+				Methodes.teleportButton(context.getSender(), Methodes.VENUS_ORBIT, false);
 			}
 
 			//Create Space Station Buttons
 			if (message.getInteger() == 10) {
 				deleteItems(context.getSender());
 				defaultOptions(context.getSender());
-				Methodes.teleportButton(context.getSender(), new ResourceLocation("boss_tools:overworld_orbit"), true);
+				Methodes.teleportButton(context.getSender(), Methodes.OVERWORLD_ORBIT, true);
 			}
 			if (message.getInteger() == 11) {
 				deleteItems(context.getSender());
 				defaultOptions(context.getSender());
-				Methodes.teleportButton(context.getSender(), new ResourceLocation("boss_tools:moon_orbit"), true);
+				Methodes.teleportButton(context.getSender(), Methodes.MOON_ORBIT, true);
 			}
 			if (message.getInteger() == 12) {
 				deleteItems(context.getSender());
 				defaultOptions(context.getSender());
-				Methodes.teleportButton(context.getSender(), new ResourceLocation("boss_tools:mars_orbit"), true);
+				Methodes.teleportButton(context.getSender(), Methodes.MARS_ORBIT, true);
 			}
 			if (message.getInteger() == 13) {
 				deleteItems(context.getSender());
 				defaultOptions(context.getSender());
-				Methodes.teleportButton(context.getSender(), new ResourceLocation("boss_tools:mercury_orbit"), true);
+				Methodes.teleportButton(context.getSender(), Methodes.MERCURY_ORBIT, true);
 			}
 			if (message.getInteger() == 14) {
 				deleteItems(context.getSender());
 				defaultOptions(context.getSender());
-				Methodes.teleportButton(context.getSender(), new ResourceLocation("boss_tools:venus_orbit"), true);
+				Methodes.teleportButton(context.getSender(), Methodes.VENUS_ORBIT, true);
 			}
 
 			context.setPacketHandled(true);

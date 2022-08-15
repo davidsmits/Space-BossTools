@@ -1,10 +1,12 @@
 package net.mrscauthd.boss_tools.world.oregen;
 
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.ISeedReader;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
@@ -64,7 +66,7 @@ public class OreGeneration {
         VENUS_MATCH = Registry.register(Registry.RULE_TEST, new ResourceLocation(BossToolsMod.ModId,"venus_ore_match"), () -> RuleTests.VenusRuleTest.codec);
 
         //MOON
-        MOON_GEN_FEATURE = featureDimCheck(MOON_GEN_FEATURE, new ResourceLocation(BossToolsMod.ModId,"moon"));
+        MOON_GEN_FEATURE = featureDimCheck(MOON_GEN_FEATURE, Methodes.MOON);
         event.getRegistry().register(MOON_GEN_FEATURE.setRegistryName("moon_ore"));
 
         moonChesseOre = MOON_GEN_FEATURE.withConfiguration(new OreFeatureConfig(RuleTests.MoonRuleTest.INSTANCE, ModInnet.MOON_CHESSE_ORE.get().getDefaultState(), 10)).range(75).square().func_242731_b(4);
@@ -82,7 +84,7 @@ public class OreGeneration {
 
 
         //MARS
-        MARS_GEN_FEATURE = featureDimCheck(MARS_GEN_FEATURE, new ResourceLocation(BossToolsMod.ModId,"mars"));
+        MARS_GEN_FEATURE = featureDimCheck(MARS_GEN_FEATURE, Methodes.MARS);
         event.getRegistry().register(MARS_GEN_FEATURE.setRegistryName("mars_ore"));
 
         marsIceShardOre = MARS_GEN_FEATURE.withConfiguration(new OreFeatureConfig(RuleTests.MarsRuleTest.INSTANCE, ModInnet.MARS_ICE_SHARD_ORE.get().getDefaultState(), 11)).range(64).square().func_242731_b(7);
@@ -100,7 +102,7 @@ public class OreGeneration {
 
 
         //MERCURY
-        MERCURY_GEN_FEATURE = featureDimCheck(MERCURY_GEN_FEATURE, new ResourceLocation(BossToolsMod.ModId,"mercury"));
+        MERCURY_GEN_FEATURE = featureDimCheck(MERCURY_GEN_FEATURE, Methodes.MERCURY);
         event.getRegistry().register(MERCURY_GEN_FEATURE.setRegistryName("mercury_ore"));
 
         mercuryIronOre = MERCURY_GEN_FEATURE.withConfiguration(new OreFeatureConfig(RuleTests.MercuryRuleTest.INSTANCE, ModInnet.MERCURY_IRON_ORE.get().getDefaultState(), 12)).range(64).square().func_242731_b(5);
@@ -109,7 +111,7 @@ public class OreGeneration {
 
 
         //Venus
-        VENUS_GEN_FEATURE = featureDimCheck(VENUS_GEN_FEATURE, new ResourceLocation(BossToolsMod.ModId,"venus"));
+        VENUS_GEN_FEATURE = featureDimCheck(VENUS_GEN_FEATURE, Methodes.VENUS);
         event.getRegistry().register(VENUS_GEN_FEATURE.setRegistryName("venus_ore"));
 
         venusCoalOre = VENUS_GEN_FEATURE.withConfiguration(new OreFeatureConfig(RuleTests.VenusRuleTest.INSTANCE, ModInnet.VENUS_COAL_ORE.get().getDefaultState(), 17)).range(125).square().func_242731_b(20);
@@ -141,7 +143,7 @@ public class OreGeneration {
     }
 
     /**DIM CHECK FOR FEATURE*/
-    public static Feature featureDimCheck(Feature feature, ResourceLocation worldcheck) {
+    public static Feature featureDimCheck(Feature feature, RegistryKey<World> worldcheck) {
         feature = new OreFeature(OreFeatureConfig.CODEC) {
             @Override
             public boolean generate(ISeedReader world, ChunkGenerator generator, Random rand, BlockPos pos, OreFeatureConfig config) {

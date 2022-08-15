@@ -18,19 +18,19 @@ public abstract class MixinItemGravity {
         ItemEntity w = (ItemEntity) ((Object) this);
 
         if (GravityCheckItem(w)) {
-            if (Methodes.isWorld(w.world, new ResourceLocation(BossToolsMod.ModId, "moon"))) {
+            if (Methodes.isWorld(w.world, Methodes.MOON)) {
                 itemGravityMath(w,0.05);
             }
 
-            if (Methodes.isWorld(w.world, new ResourceLocation(BossToolsMod.ModId, "mars"))) {
+            if (Methodes.isWorld(w.world, Methodes.MARS)) {
                 itemGravityMath(w,0.06);
             }
 
-            if (Methodes.isWorld(w.world, new ResourceLocation(BossToolsMod.ModId, "mercury"))) {
+            if (Methodes.isWorld(w.world, Methodes.MERCURY)) {
                 itemGravityMath(w,0.05);
             }
 
-            if (Methodes.isWorld(w.world, new ResourceLocation(BossToolsMod.ModId, "venus"))) {
+            if (Methodes.isWorld(w.world, Methodes.VENUS)) {
                 itemGravityMath(w,0.06);
             }
 

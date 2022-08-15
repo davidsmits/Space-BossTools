@@ -238,16 +238,16 @@ public class OverlayEvents {
 
                 ResourceLocation planet;
 
-                if (Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId, "moon"))) {
+                if (Methodes.isWorld(world, Methodes.MOON)) {
                     planet = new ResourceLocation(BossToolsMod.ModId, "textures/planet_bar/rocket_y_main_moon.png");
 
-                } else if (Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId, "mars"))) {
+                } else if (Methodes.isWorld(world, Methodes.MARS)) {
                     planet = new ResourceLocation(BossToolsMod.ModId, "textures/planet_bar/rocket_y_main_mars.png");
 
-                } else if (Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId, "mercury"))) {
+                } else if (Methodes.isWorld(world, Methodes.MERCURY)) {
                     planet = new ResourceLocation(BossToolsMod.ModId, "textures/planet_bar/rocket_y_main_mercury.png");
 
-                } else if (Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId, "venus"))) {
+                } else if (Methodes.isWorld(world, Methodes.VENUS)) {
                     planet = new ResourceLocation(BossToolsMod.ModId, "textures/planet_bar/rocket_y_main_venus.png");
 
                 } else if (Methodes.isOrbitWorld(world)) {

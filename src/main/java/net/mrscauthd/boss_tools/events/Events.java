@@ -73,10 +73,10 @@ public class Events {
         Gravity.Gravity(entity, Gravity.GravityType.LIVING, world);
 
         //Venus Rain
-        Methodes.VenusRain(entity, new ResourceLocation(BossToolsMod.ModId, "venus"));
+        Methodes.VenusRain(entity, Methodes.VENUS);
 
         //Venus Fire
-        Methodes.VenusFire(entity, new ResourceLocation(BossToolsMod.ModId, "venus"), new ResourceLocation(BossToolsMod.ModId, "mercury"));
+        Methodes.VenusFire(entity, Methodes.VENUS, Methodes.MERCURY);
     }
 
     @OnlyIn(Dist.CLIENT)

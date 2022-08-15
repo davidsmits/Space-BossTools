@@ -1,5 +1,6 @@
 package net.mrscauthd.boss_tools.events;
 
+import com.google.common.collect.ImmutableSet;
 import io.netty.buffer.Unpooled;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -49,15 +50,29 @@ import net.mrscauthd.boss_tools.events.forgeevents.LivingSetVenusRainEvent;
 import net.mrscauthd.boss_tools.gui.screens.planetselection.PlanetSelectionGui;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class Methodes {
 
-    public static void worldTeleport(PlayerEntity entity, ResourceLocation Planet, double high) {
+    public static final RegistryKey<World> MOON = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(BossToolsMod.ModId, "moon"));
+    public static final RegistryKey<World> MOON_ORBIT = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(BossToolsMod.ModId, "moon_orbit"));
+    public static final RegistryKey<World> MARS = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(BossToolsMod.ModId, "mars"));
+    public static final RegistryKey<World> MARS_ORBIT = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(BossToolsMod.ModId, "mars_orbit"));
+    public static final RegistryKey<World> MERCURY = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(BossToolsMod.ModId, "mercury"));
+    public static final RegistryKey<World> MERCURY_ORBIT = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(BossToolsMod.ModId, "mercury_orbit"));
+    public static final RegistryKey<World> VENUS = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(BossToolsMod.ModId, "venus"));
+    public static final RegistryKey<World> VENUS_ORBIT = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(BossToolsMod.ModId, "venus_orbit"));
+    public static final RegistryKey<World> OVERWORLD = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation("minecraft:overworld"));
+    public static final RegistryKey<World> OVERWORLD_ORBIT = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(BossToolsMod.ModId,"overworld_orbit"));
+
+    public static final Set<RegistryKey<World>> WORLDS_WITHOUT_RAIN = ImmutableSet.of(MOON, MOON_ORBIT, MARS_ORBIT, MERCURY, MERCURY_ORBIT, VENUS_ORBIT, OVERWORLD_ORBIT);
+    public static final Set<RegistryKey<World>> SPACE_WORLDS = ImmutableSet.of(MOON, MOON_ORBIT, MARS, MARS_ORBIT, MERCURY, MERCURY_ORBIT, VENUS, VENUS_ORBIT, OVERWORLD_ORBIT);
+    public static final Set<RegistryKey<World>> ORBIT_WORLDS = ImmutableSet.of(MOON_ORBIT, MARS_ORBIT, MERCURY_ORBIT, VENUS_ORBIT, OVERWORLD_ORBIT);
+
+    public static void worldTeleport(PlayerEntity entity, RegistryKey<World> destinationType, double high) {
         if (!entity.world.isRemote) {
 
-            RegistryKey<World> destinationType = RegistryKey.getOrCreateKey(Registry.WORLD_KEY, Planet);
             ServerWorld nextWorld = entity.getServer().getWorld(destinationType);
 
             if (nextWorld != null) {
@@ -140,37 +155,15 @@ public class Methodes {
     }
 
     public static boolean isSpaceWorld(World world) {
-        if (Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"moon"))
-                || Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"moon_orbit"))
-                || Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"mars"))
-                || Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"mars_orbit"))
-                || Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"mercury"))
-                || Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"mercury_orbit"))
-                || Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"venus"))
-                || Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"venus_orbit"))
-                || Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"overworld_orbit"))) {
-            return true;
-        }
-        return false;
+        return SPACE_WORLDS.contains(world.getDimensionKey());
     }
 
     public static boolean isOrbitWorld(World world) {
-        if (Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"overworld_orbit"))
-                || Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"moon_orbit"))
-                || Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"mars_orbit"))
-                || Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"mercury_orbit"))
-                || Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"venus_orbit"))) {
-            return true;
-        }
-        return false;
+        return ORBIT_WORLDS.contains(world.getDimensionKey());
     }
 
-    public static boolean isWorld(World world, ResourceLocation loc) {
-        RegistryKey<World> world2 = world.getDimensionKey();
-        if (world2 == RegistryKey.getOrCreateKey(Registry.WORLD_KEY, loc)) {
-            return true;
-        }
-        return false;
+    public static boolean isWorld(World world, RegistryKey<World> loc) {
+        return world.getDimensionKey() == loc;
     }
 
     public static void OxygenDamage(LivingEntity entity) {
@@ -220,15 +213,11 @@ public class Methodes {
     }
 
     /**If a entity should not get Fire add it to the Tag "venus_fire"*/
-    public static void VenusFire(LivingEntity entity, ResourceLocation planet1, ResourceLocation planet2) {
-
-        RegistryKey<World> key = entity.world.getDimensionKey();
-
-        if (key == RegistryKey.getOrCreateKey(Registry.WORLD_KEY, planet1) || key == RegistryKey.getOrCreateKey(Registry.WORLD_KEY, planet2)) {
+    public static void VenusFire(LivingEntity entity, RegistryKey<World> planet1, RegistryKey<World> planet2) {
+        if (isWorld(entity.world,planet1) || isWorld(entity.world,planet2)) {
             if (!Methodes.nethriteSpaceSuitCheck(entity)) {
                 if (!MinecraftForge.EVENT_BUS.post(new LivingSetFireInHotPlanetEvent(entity))) {
                     if (!tagCheck(entity, BossToolsMod.ModId + ":entities/venus_fire")) {
-
                         entity.setFire(10);
                     }
                 }
@@ -237,8 +226,8 @@ public class Methodes {
     }
 
     /**If a entity should not get Damage add it to the Tag "venus_rain", and if you has a Entity like a car return the damage to false*/
-    public static void VenusRain(LivingEntity entity, ResourceLocation planet) {
-        if (entity.world.getDimensionKey() == RegistryKey.getOrCreateKey(Registry.WORLD_KEY, planet)) {
+    public static void VenusRain(LivingEntity entity, RegistryKey<World> planet) {
+        if (Methodes.isWorld(entity.world, planet)) {
             if (entity.world.getWorldInfo().isRaining() && entity.world.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (int) Math.floor(entity.getPosX()), (int) Math.floor(entity.getPosZ())) <= Math.floor(entity.getPosY()) + 1) {
                 if (!MinecraftForge.EVENT_BUS.post(new LivingSetVenusRainEvent(entity))) {
                     if (!tagCheck(entity,BossToolsMod.ModId + ":entities/venus_rain")) {
@@ -298,7 +287,7 @@ public class Methodes {
         return false;
     }
 
-    public static void landerTeleport(PlayerEntity player, ResourceLocation newPlanet) {
+    public static void landerTeleport(PlayerEntity player, RegistryKey<World> newPlanet) {
         LanderEntity lander = (LanderEntity) player.getRidingEntity();
 
         if (player.getPosY() < 1) {
@@ -325,10 +314,10 @@ public class Methodes {
         }
     }
 
-    public static void rocketTeleport(PlayerEntity player, ResourceLocation planet, ItemStack rocketItem, Boolean SpaceStation) {
+    public static void rocketTeleport(PlayerEntity player, RegistryKey<World> planet, ItemStack rocketItem, Boolean SpaceStation) {
         RegistryKey<World> dim = player.world.getDimensionKey();
 
-        if (dim != RegistryKey.getOrCreateKey(Registry.WORLD_KEY, planet)) {
+        if (!Methodes.isWorld(player.world,planet)) {
             Methodes.worldTeleport(player, planet, 700);
         } else {
             player.setPositionAndUpdate(player.getPosX(), 700, player.getPosZ());
@@ -395,7 +384,7 @@ public class Methodes {
         }
     }
 
-    public static void teleportButton (PlayerEntity player, ResourceLocation planet, Boolean SpaceStation) {
+    public static void teleportButton (PlayerEntity player, RegistryKey<World> planet, Boolean SpaceStation) {
         ItemStack itemStack = new ItemStack(Items.AIR, 1);
 
         if (player.getPersistentData().getString(BossToolsMod.ModId + ":rocket_type").equals("entity." + BossToolsMod.ModId + ".rocket_t1")) {
@@ -412,49 +401,38 @@ public class Methodes {
     }
 
     public static void landerTeleportOrbit(PlayerEntity player, World world) {
-        if (Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId, "overworld_orbit"))) {
-            Methodes.landerTeleport(player, new ResourceLocation("minecraft:overworld"));
+        if (Methodes.isWorld(world, OVERWORLD_ORBIT)) {
+            Methodes.landerTeleport(player, OVERWORLD);
         }
-        if (Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId, "moon_orbit"))) {
-            Methodes.landerTeleport(player, new ResourceLocation(BossToolsMod.ModId, "moon"));
+        if (Methodes.isWorld(world, MOON_ORBIT)) {
+            Methodes.landerTeleport(player, MOON);
         }
-        if (Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId, "mars_orbit"))) {
-            Methodes.landerTeleport(player, new ResourceLocation(BossToolsMod.ModId, "mars"));
+        if (Methodes.isWorld(world, MARS_ORBIT)) {
+            Methodes.landerTeleport(player, MARS);
         }
-        if (Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId, "mercury_orbit"))) {
-            Methodes.landerTeleport(player, new ResourceLocation(BossToolsMod.ModId, "mercury"));
+        if (Methodes.isWorld(world, MERCURY_ORBIT)) {
+            Methodes.landerTeleport(player, MERCURY);
         }
-        if (Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId, "venus_orbit"))) {
-            Methodes.landerTeleport(player, new ResourceLocation(BossToolsMod.ModId, "venus"));
+        if (Methodes.isWorld(world, VENUS_ORBIT)) {
+            Methodes.landerTeleport(player, VENUS);
         }
     }
 
     public static void playerFalltoPlanet(World world, PlayerEntity player) {
-        RegistryKey<World> world2 = world.getDimensionKey();
-
-        if (world2 == RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(BossToolsMod.ModId, "overworld_orbit"))) {
-            ResourceLocation planet = new ResourceLocation("overworld");
-            Methodes.worldTeleport(player, planet, 450);
+        if (Methodes.isWorld(world, OVERWORLD_ORBIT)) {
+            Methodes.worldTeleport(player, OVERWORLD, 450);
         }
-
-        if (world2 == RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(BossToolsMod.ModId, "moon_orbit"))) {
-            ResourceLocation planet = new ResourceLocation(BossToolsMod.ModId, "moon");
-            Methodes.worldTeleport(player, planet, 450);
+        if (Methodes.isWorld(world, MOON_ORBIT)) {
+            Methodes.worldTeleport(player, MOON, 450);
         }
-
-        if (world2 == RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(BossToolsMod.ModId, "mars_orbit"))) {
-            ResourceLocation planet = new ResourceLocation(BossToolsMod.ModId, "mars");
-            Methodes.worldTeleport(player, planet, 450);
+        if (Methodes.isWorld(world, MARS_ORBIT)) {
+            Methodes.worldTeleport(player, MARS, 450);
         }
-
-        if (world2 == RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(BossToolsMod.ModId, "mercury_orbit"))) {
-            ResourceLocation planet = new ResourceLocation(BossToolsMod.ModId, "mercury");
-            Methodes.worldTeleport(player, planet, 450);
+        if (Methodes.isWorld(world, MERCURY_ORBIT)) {
+            Methodes.worldTeleport(player, MERCURY, 450);
         }
-
-        if (world2 == RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(BossToolsMod.ModId, "venus_orbit"))) {
-            ResourceLocation planet = new ResourceLocation(BossToolsMod.ModId, "venus");
-            Methodes.worldTeleport(player, planet, 450);
+        if (Methodes.isWorld(world, VENUS_ORBIT)) {
+            Methodes.worldTeleport(player, VENUS, 450);
         }
     }
 

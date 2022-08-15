@@ -16,19 +16,19 @@ public class Gravity {
         double venus = 0.04;
         double orbit = 0.02;
 
-        if (Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"moon"))) {
+        if (Methodes.isWorld(world, Methodes.MOON)) {
             gravityMath(type, entity, moon, -2.5f);
         }
 
-        if (Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"mars"))) {
+        if (Methodes.isWorld(world, Methodes.MARS)) {
             gravityMath(type, entity, mars, -2.0f);
         }
 
-        if (Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"mercury"))) {
+        if (Methodes.isWorld(world, Methodes.MERCURY)) {
             gravityMath(type, entity, mercury, -2.5f);
         }
 
-        if (Methodes.isWorld(world, new ResourceLocation(BossToolsMod.ModId,"venus"))) {
+        if (Methodes.isWorld(world, Methodes.VENUS)) {
             gravityMath(type, entity, venus, -2.0f);
         }
 
